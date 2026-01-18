@@ -7,6 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const commandHandler = new CommandHandler();
     
+    // Tab补全状态
+    let tabCompletionState = {
+        matches: [],
+        index: 0,
+        lastInput: ''
+    };
+    
     // 更新提示符
     function updatePrompt() {
         const path = commandHandler.currentPath === '/home/guest' ? '~' : commandHandler.currentPath;
@@ -65,6 +72,93 @@ document.addEventListener('DOMContentLoaded', () => {
         terminal.scrollTop = terminal.scrollHeight;
     }
     
+    // Tab补全函数
+    function handleTabCompletion() {
+        const currentValue = input.value;
+        
+        // 如果输入改变了，重置补全状态
+        if (currentValue !== tabCompletionState.lastInput) {
+            tabCompletionState.matches = [];
+            tabCompletionState.index = 0;
+        }
+        
+        // 如果还没有匹配项，生成匹配列表
+        if (tabCompletionState.matches.length === 0) {
+            const parts = currentValue.split(/\s+/);
+            const lastPart = parts[parts.length - 1] || '';
+            
+            // 如果是第一个词，补全命令
+            if (parts.length === 1 && !currentValue.endsWith(' ')) {
+                const commands = ['help', 'ls', 'cd', 'cat', 'pwd', 'clear', 'whoami', 
+                                'decrypt', 'tree', 'find', 'echo', 'date', 'uname', 
+                                'history', 'achievements'];
+                tabCompletionState.matches = commands.filter(cmd => cmd.startsWith(lastPart));
+            } else {
+                // 否则补全文件/目录名
+                const pathToComplete = lastPart;
+                const matches = getFileCompletions(pathToComplete);
+                tabCompletionState.matches = matches;
+            }
+            
+            if (tabCompletionState.matches.length === 0) {
+                return; // 没有匹配
+            }
+        }
+        
+        // 循环选择匹配项
+        const match = tabCompletionState.matches[tabCompletionState.index];
+        const parts = currentValue.split(/\s+/);
+        
+        if (parts.length === 1 && !currentValue.endsWith(' ')) {
+            input.value = match;
+        } else {
+            parts[parts.length - 1] = match;
+            input.value = parts.join(' ');
+        }
+        
+        // 更新状态
+        tabCompletionState.lastInput = input.value;
+        tabCompletionState.index = (tabCompletionState.index + 1) % tabCompletionState.matches.length;
+    }
+    
+    // 获取文件/目录补全
+    function getFileCompletions(partial) {
+        let searchPath = commandHandler.currentPath;
+        let prefix = '';
+        
+        // 处理路径
+        if (partial.includes('/')) {
+            const lastSlash = partial.lastIndexOf('/');
+            const dirPath = partial.substring(0, lastSlash);
+            prefix = partial.substring(lastSlash + 1);
+            
+            if (partial.startsWith('/')) {
+                searchPath = dirPath || '/';
+            } else {
+                searchPath = resolvePath(commandHandler.currentPath, dirPath);
+            }
+        } else {
+            prefix = partial;
+        }
+        
+        // 获取目录内容
+        const items = listDirectory(searchPath, true);
+        if (!items) {
+            return [];
+        }
+        
+        // 过滤匹配的项
+        const matches = items
+            .filter(item => item.name.startsWith(prefix))
+            .map(item => {
+                const fullName = item.name;
+                // 如果是目录，添加斜杠
+                return item.type === 'directory' ? fullName + '/' : fullName;
+            });
+        
+        return matches;
+    }
+    
     // 执行命令
     function executeCommand(command) {
         if (!command.trim()) {
@@ -106,17 +200,15 @@ document.addEventListener('DOMContentLoaded', () => {
             input.value = commandHandler.getHistoryCommand('down');
         } else if (e.key === 'Tab') {
             e.preventDefault();
-            // 简单的自动补全
-            const currentValue = input.value;
-            const commands = ['help', 'ls', 'cd', 'cat', 'pwd', 'clear', 'whoami', 'decrypt', 'tree', 'find'];
-            const match = commands.find(cmd => cmd.startsWith(currentValue));
-            if (match) {
-                input.value = match;
-            }
+            handleTabCompletion();
         } else if (e.key === 'l' && e.ctrlKey) {
             e.preventDefault();
             executeCommand('clear');
             input.value = '';
+        } else {
+            // 其他按键时重置Tab补全状态
+            tabCompletionState.matches = [];
+            tabCompletionState.index = 0;
         }
     });
     

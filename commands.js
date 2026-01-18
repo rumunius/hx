@@ -506,28 +506,40 @@ Platform: Project Ginkgo`
                 icon: '🔍',
                 name: 'Explorer',
                 name_cn: '探索者',
+                name_hidden: 'Ex?????r',
+                name_cn_hidden: '探???',
                 desc: '发现了隐藏文件',
+                desc_hidden: '发现了???文件',
                 hint: '提示：使用 ls -a 可以查看隐藏文件'
             },
             'club_finder': {
                 icon: '🎮',
                 name: 'Club Finder',
                 name_cn: '俱乐部发现者',
+                name_hidden: 'C??? F?????',
+                name_cn_hidden: '??????者',
                 desc: '找到了极客俱乐部',
+                desc_hidden: '找到了??????',
                 hint: '提示：探索隐藏目录 .club'
             },
             'crypto_master': {
                 icon: '🔐',
                 name: 'Crypto Master',
                 name_cn: '解密大师',
+                name_hidden: 'C????? M?????',
+                name_cn_hidden: '???大师',
                 desc: '成功解密了加密文件',
+                desc_hidden: '成功???了???文件',
                 hint: '提示：在 /var/secrets 中寻找密钥'
             },
             'true_geek': {
                 icon: '⚡',
                 name: 'True Geek',
                 name_cn: '真正的极客',
+                name_hidden: 'T??? G???',
+                name_cn_hidden: '???的???',
                 desc: '解锁了终极彩蛋',
+                desc_hidden: '解锁了??????',
                 hint: '提示：真理藏在命令参数中...'
             }
         };
@@ -545,8 +557,8 @@ Platform: Project Ginkgo`
                 output += `${achievement.icon} ${achievement.name} (${achievement.name_cn})
    ✓ ${achievement.desc}\n\n`;
             } else {
-                output += `🔒 ${achievement.name} (${achievement.name_cn})
-   ✗ 未解锁
+                output += `🔒 ${achievement.name_hidden} (${achievement.name_cn_hidden})
+   ✗ ${achievement.desc_hidden}
    ${achievement.hint}\n\n`;
             }
         }
