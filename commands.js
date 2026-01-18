@@ -507,9 +507,9 @@ Platform: Project Ginkgo`
                 name_cn: '探索者',
                 name_hidden: 'Ex?????r',
                 name_cn_hidden: '探???',
-                desc: '发现了隐藏文件',
-                desc_hidden: '发现了???文件',
-                hint: '提示：使用 ls -a 可以查看隐藏文件'
+                desc: '发现了隐藏目录',
+                desc_hidden: '发现了???目录',
+                hint: '提示：使用 ls -a 可以查看隐藏目录'
             },
             'club_finder': {
                 name: 'Club Finder',

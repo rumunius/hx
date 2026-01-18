@@ -277,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (konamiCode.join(',') === konamiPattern.join(',')) {
             konamiCode = [];
-            addOutput('\n🎮 Konami Code Detected!', 'success');
+            addOutput('\nKonami Code Detected!', 'success');
             addOutput('You are a true gamer and a geek. UESTC needs people like you!', 'info');
             addOutput('Hidden message: The best secrets are found by those who never stop exploring.\n', 'info');
             scrollToBottom();
@@ -301,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (firstVisit) {
         localStorage.setItem('visited', 'true');
         setTimeout(() => {
-            addOutput('\n🌟 Welcome, first-time visitor!', 'success');
+            addOutput('\nWelcome, first-time visitor!', 'success');
             addOutput('This terminal is full of secrets. Take your time to explore.', 'info');
             addOutput('Start with: cat welcome.txt\n', 'info');
             scrollToBottom();
