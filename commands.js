@@ -99,13 +99,13 @@ class CommandHandler {
   echo <text>       输出文本
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-💡 新手提示：
+* 新手提示：
    - 输入 'cat welcome.txt' 查看招生信息和极客俱乐部
    - 输入 'cat .club/info.txt' 了解技术社群详情
    - 使用 'ls -a' 发现更多隐藏的秘密
    - 探索 /system/logs 了解更多线索
 
-🎮 给极客的挑战：
+* 给极客的挑战：
    - 找到加密文件并解密
    - 发现所有隐藏的成就
    - 找到通往创作者博客的路径
@@ -156,7 +156,7 @@ class CommandHandler {
             output = items.map(item => {
                 const type = item.type === 'directory' ? 'DIR' : 'FILE';
                 const hidden = item.hidden ? '(hidden)' : '';
-                const encrypted = item.encrypted ? '🔒' : '';
+                const encrypted = item.encrypted ? '[LOCKED]' : '';
                 return `${type.padEnd(8)} ${item.name} ${hidden} ${encrypted}`;
             }).join('\n');
         } else {
@@ -168,14 +168,14 @@ class CommandHandler {
             
             if (dirs.length > 0) {
                 result.push('Directories:');
-                result.push(dirs.map(d => `  📁 ${d.name}${d.hidden ? ' (hidden)' : ''}`).join('\n'));
+                result.push(dirs.map(d => `  [DIR] ${d.name}${d.hidden ? ' (hidden)' : ''}`).join('\n'));
             }
             
             if (files.length > 0) {
                 if (dirs.length > 0) result.push('');
                 result.push('Files:');
                 result.push(files.map(f => 
-                    `  📄 ${f.name}${f.hidden ? ' (hidden)' : ''}${f.encrypted ? ' 🔒' : ''}`
+                    `  [FILE] ${f.name}${f.hidden ? ' (hidden)' : ''}${f.encrypted ? ' [LOCKED]' : ''}`
                 ).join('\n'));
             }
             
@@ -250,7 +250,7 @@ class CommandHandler {
         if (file.encrypted) {
             return {
                 success: true,
-                output: `⚠️  This file is encrypted!\n\n${file.content}\n\n💡 Hint: Use 'decrypt ${filePath} <method>' to decrypt this file.`,
+                output: `[!] This file is encrypted!\n\n${file.content}\n\n* Hint: Use 'decrypt ${filePath} <method>' to decrypt this file.`,
                 type: 'warning'
             };
         }
@@ -281,7 +281,7 @@ class CommandHandler {
             this.unlockAchievement('true_geek');
             return {
                 success: true,
-                output: `🎉 Ultimate Easter Egg Unlocked! 🎉
+                output: `!!! Ultimate Easter Egg Unlocked! !!!
 
 You are: A True Geek
 
@@ -289,9 +289,9 @@ Congratulations! You've completed the full journey.
 
 Special Rewards:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🌟 Creator's Blog: https://rumunius.top
-🎮 极客俱乐部微信群: 占位符占位符占位符
-📚 UESTC招生网: https://zs.uestc.edu.cn
+* Creator's Blog: https://rumunius.top
+* 极客俱乐部微信群: 占位符占位符占位符
+* UESTC招生网: https://zs.uestc.edu.cn
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Domain Easter Egg:
@@ -303,9 +303,9 @@ We believe you'll thrive at UESTC!
 
 "求实求真，大气大为" - UESTC
 
-💡 Tip: 输入 'achievements' 查看所有达成的成就
+* Tip: 输入 'achievements' 查看所有达成的成就
 
-Welcome to UESTC, future geek! 🚀`,
+Welcome to UESTC, future geek! :D`,
                 type: 'success'
             };
         }
@@ -317,7 +317,7 @@ Hostname: uestc
 Groups: students, explorers
 Home: /home/guest
 
-💡 Hint: It is not a truth until you find the truth.`
+* Hint: It is not a truth until you find the truth.`
         };
     }
     
@@ -356,7 +356,7 @@ Home: /home/guest
             
             return {
                 success: true,
-                output: `🔓 Decryption successful!\n\n${file.decrypted}`,
+                output: `[UNLOCKED] Decryption successful!\n\n${file.decrypted}`,
                 type: 'success'
             };
         } else {
@@ -384,8 +384,8 @@ Home: /home/guest
             filtered.forEach((item, index) => {
                 const isLast = index === filtered.length - 1;
                 const connector = isLast ? '└── ' : '├── ';
-                const icon = item.type === 'directory' ? '📁' : '📄';
-                const encrypted = item.encrypted ? ' 🔒' : '';
+                const icon = item.type === 'directory' ? '[DIR]' : '[FILE]';
+                const encrypted = item.encrypted ? ' [LOCKED]' : '';
                 
                 output += `${prefix}${connector}${icon} ${item.name}${encrypted}\n`;
                 
@@ -426,7 +426,7 @@ Home: /home/guest
                     const fullPath = path === '/' ? `/${name}` : `${path}/${name}`;
                     
                     if (name.toLowerCase().includes(searchTerm)) {
-                        const icon = item.type === 'directory' ? '📁' : '📄';
+                        const icon = item.type === 'directory' ? '[DIR]' : '[FILE]';
                         results.push(`${icon} ${fullPath}`);
                     }
                     
@@ -503,7 +503,6 @@ Platform: Project Ginkgo`
     showAchievements() {
         const allAchievements = {
             'explorer': {
-                icon: '🔍',
                 name: 'Explorer',
                 name_cn: '探索者',
                 name_hidden: 'Ex?????r',
@@ -513,7 +512,6 @@ Platform: Project Ginkgo`
                 hint: '提示：使用 ls -a 可以查看隐藏文件'
             },
             'club_finder': {
-                icon: '🎮',
                 name: 'Club Finder',
                 name_cn: '俱乐部发现者',
                 name_hidden: 'C??? F?????',
@@ -523,7 +521,6 @@ Platform: Project Ginkgo`
                 hint: '提示：探索隐藏目录 .club'
             },
             'crypto_master': {
-                icon: '🔐',
                 name: 'Crypto Master',
                 name_cn: '解密大师',
                 name_hidden: 'C????? M?????',
@@ -533,7 +530,6 @@ Platform: Project Ginkgo`
                 hint: '提示：在 /var/secrets 中寻找密钥'
             },
             'true_geek': {
-                icon: '⚡',
                 name: 'True Geek',
                 name_cn: '真正的极客',
                 name_hidden: 'T??? G???',
@@ -554,17 +550,17 @@ Platform: Project Ginkgo`
         for (const [key, achievement] of Object.entries(allAchievements)) {
             const unlocked = this.achievements.has(key);
             if (unlocked) {
-                output += `${achievement.icon} ${achievement.name} (${achievement.name_cn})
-   ✓ ${achievement.desc}\n\n`;
+                output += `[UNLOCKED] ${achievement.name} (${achievement.name_cn})
+   - ${achievement.desc}\n\n`;
             } else {
-                output += `🔒 ${achievement.name_hidden} (${achievement.name_cn_hidden})
-   ✗ ${achievement.desc_hidden}
+                output += `[LOCKED] ${achievement.name_hidden} (${achievement.name_cn_hidden})
+   - ${achievement.desc_hidden}
    ${achievement.hint}\n\n`;
             }
         }
         
         output += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-💡 继续探索系统，解锁更多成就！`;
+* 继续探索系统，解锁更多成就！`;
         
         return {
             success: true,
@@ -583,25 +579,21 @@ Platform: Project Ginkgo`
         
         const achievements = {
             'explorer': {
-                icon: '🔍',
                 name: 'Explorer',
                 name_cn: '探索者',
                 desc: '发现了隐藏文件'
             },
             'club_finder': {
-                icon: '🎮',
                 name: 'Club Finder',
                 name_cn: '俱乐部发现者',
                 desc: '找到了极客俱乐部'
             },
             'crypto_master': {
-                icon: '🔐',
                 name: 'Crypto Master',
                 name_cn: '解密大师',
                 desc: '成功解密了加密文件'
             },
             'true_geek': {
-                icon: '⚡',
                 name: 'True Geek',
                 name_cn: '真正的极客',
                 desc: '解锁了终极彩蛋'
@@ -612,7 +604,7 @@ Platform: Project Ginkgo`
         if (ach) {
             // 这将在terminal.js中处理
             return {
-                achievement: `${ach.icon} ${ach.name} (${ach.name_cn}) - ${ach.desc}`
+                achievement: `${ach.name} (${ach.name_cn}) - ${ach.desc}`
             };
         }
     }

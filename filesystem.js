@@ -15,20 +15,20 @@ const fileSystem = {
   电子科技大学招生信息
 ===========================================
 
-📞 招生办联系方式：
+* 招生办联系方式：
    电话：028-61831137 / 61831139
    网址：https://zs.uestc.edu.cn
 
-📧 咨询邮箱：zhaoban@uestc.edu.cn
+* 咨询邮箱：zhaoban@uestc.edu.cn
 
-🏫 学校地址：
+* 学校地址：
    成都市高新区（西区）西源大道2006号
    邮编：611731
 
-🎮 极客俱乐部微信群：占位符占位符占位符
+* 极客俱乐部微信群：占位符占位符占位符
    （想了解更多技术氛围？输入 'cat .club/info.txt' 查看详情）
 
-💡 提示：
+* 提示：
    想了解更多？试试以下命令：
    - cat about.txt        查看学校简介
    - ls -a                查看所有文件（包括隐藏文件）
@@ -44,23 +44,23 @@ const fileSystem = {
   电子科技大学简介
 ===========================================
 
-🎓 学校概况：
+* 学校概况：
 
 电子科技大学坐落于四川省成都市，是中华人民共和国教育部直属高校，由教育部、工业和信息化部、四川省和成都市共建。学校是国家“双一流”建设高校（A类），也是“985工程”和“211工程”重点建设大学。
 
-🌟 学科特色：
+* 学科特色：
 
 学校以电子信息科学技术为核心，形成了以工为主，理工渗透，理、工、管、文、医协调发展的多科性研究型大学格局。学校设有23个学院（部），提供65个本科专业。
 
-📊 学科实力：
+* 学科实力：
 
 电子科学与技术、信息与通信工程两个学科为国家一级重点学科。在教育部第四轮全国学科评估中，电子科学与技术、信息与通信工程均获评最高等级A+。学校多个学科进入ESI全球排名前1%。根据2022年数据，已有包括工程学、计算机科学、材料科学在内的13个学科进入ESI前1%，其中工程学和计算机科学进入前1‰。
 
-🏆 历史荣誉：
+* 历史荣誉：
 
 学校建校于1956年，原名成都电讯工程学院，由交通大学（现上海交通大学、西安交通大学）、南京工学院（现东南大学）、华南工学院（现华南理工大学）的电讯工程有关专业合并创建而成。学校于1960年被列为全国重点高等学校。校训为“求实求真，大气大为”。
 
-💫 校园文化：
+* 校园文化：
 
 学校拥有清水河、沙河、九里堤三个校区，校园环境优美，银杏成荫。学校科技创新氛围浓厚，学生积极参与各类竞赛并屡获佳绩。学校实施国际化发展战略，已与全球众多高校和科研机构建立了广泛的合作关系。
 
@@ -75,7 +75,7 @@ const fileSystem = {
                                     'info.txt': {
                                         type: 'file',
                                         content: `===========================================
-  🎮 成电极客俱乐部
+  * 成电极客俱乐部
 ===========================================
 
 你找到了隐藏的极客俱乐部信息！
@@ -83,18 +83,18 @@ const fileSystem = {
 这是一个由在校学生自发组织的技术交流社群，
 我们讨论编程、硬件、AI、网络安全等各种技术话题。
 
-🔥 加入我们的私域社群：
+* 加入我们的私域社群：
    微信群号：占位符占位符占位符
    (添加管理员微信并回复"极客"获取入群邀请)
 
-💡 俱乐部特色：
+* 俱乐部特色：
    - 定期技术分享会
    - 项目组队开发
    - 竞赛组队参赛
    - 学长学姐答疑
    - 实习内推机会
 
-⚡ 我们在等你！
+* 我们在等你！
    作为高中生的你，如果对技术充满热情，
    欢迎提前加入，感受大学的技术氛围。
 ===========================================`
@@ -190,7 +190,7 @@ Guvf vf n frperg zrffntr sbe gur gehr trrxf.
 Vs lbh ner ernqvat guvf, lbh zhfg unir sbhaq gur xrl 
 naq qrpelcgrq guvf svyr. Jryy qbar!
 
-🎉 Npuvrirzrag Haybpxrq: Pelcgb Znfgre 🎉
+[UNLOCKED] Npuvrirzrag Haybpxrq: Pelcgb Znfgre [UNLOCKED]
 
 Urer'f lbhe erjneq:
 Gur perngbe'f oybg: ehzhavhf.gbc
@@ -213,7 +213,7 @@ This is a secret message for the true geeks.
 If you are reading this, you must have found the key 
 and decrypted this file. Well done!
 
-🎉 Achievement Unlocked: Crypto Master 🎉
+[UNLOCKED] Achievement Unlocked: Crypto Master [UNLOCKED]
 
 Here's your reward:
 The creator's blog: rumunius.top
@@ -261,7 +261,7 @@ May your journey in UESTC be filled with wonder!
                         contents: {
                             'key.txt': {
                                 type: 'file',
-                                content: `🔑 Decryption Key Found!
+                                content: `[KEY] Decryption Key Found!
 
 Encryption Method: ROT13
 Algorithm: Simple substitution cipher
