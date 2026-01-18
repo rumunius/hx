@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Ginkgo - UESTC Terminal</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <vercel-analytics data-props="{}" data-params="{}" data-pathname="/"></vercel-analytics>
     <div class="terminal-container">
         <div class="terminal-header">
             <div class="terminal-buttons">
@@ -17,7 +18,7 @@
             </div>
             <div class="terminal-title">guest@uestc - Terminal</div>
         </div>
-        
+
         <div class="terminal-body" id="terminal">
             <div class="boot-sequence">
                 <div class="boot-line">UESTC Terminal v1.0.0</div>
@@ -26,7 +27,7 @@
                 <div class="boot-line">System ready.</div>
                 <div class="boot-line"></div>
             </div>
-            
+
             <pre class="ascii-art">
     ____               _           __       _______       __             
    / __ \_________    (_)__  _____/ /__    / ____(_)___  / /______ _____ 
@@ -35,30 +36,37 @@
 /_/   /_/   \____/_/ /\___/\___/\__(_)   \____/_/_/ /_/_/|_|\__, /\____/ 
                 /___/                                      /____/        
             </pre>
-            
+
             <div class="welcome-message">
                 <p>欢迎来到 Project Ginkgo - 电子科技大学探索系统</p>
                 <p>这是一个交互式终端，你可以通过命令探索这个系统的秘密。</p>
                 <p></p>
                 <p>* 新手指南：</p>
-                <p>  <span class="highlight">cat 文件名</span> - 查看文件内容（试试 <span class="highlight">cat welcome.txt</span>）</p>
-                <p>  <span class="highlight">ls</span> - 列出当前目录的文件</p>
-                <p>  <span class="highlight">cd 目录名</span> - 进入目录（<span class="highlight">cd ..</span> 返回上级）</p>
-                <p>  <span class="highlight">help</span> - 查看所有命令</p>
+                <p> <span class="highlight">cat 文件名</span> - 查看文件内容（试试 <span class="highlight">cat welcome.txt</span>）
+                </p>
+                <p> <span class="highlight">ls</span> - 列出当前目录的文件</p>
+                <p> <span class="highlight">cd 目录名</span> - 进入目录（<span class="highlight">cd ..</span> 返回上级）</p>
+                <p> <span class="highlight">help</span> - 查看所有命令</p>
                 <p></p>
             </div>
-            
+
             <div id="output"></div>
-            
+
             <div class="input-line">
                 <span class="prompt">guest@uestc:~$</span>
-                <input type="text" id="command-input" class="command-input" autocomplete="off" spellcheck="false" autofocus>
+                <input type="text" id="command-input" class="command-input" autocomplete="off" spellcheck="false"
+                    autofocus>
             </div>
         </div>
     </div>
-    
+
     <script src="filesystem.js"></script>
     <script src="commands.js"></script>
     <script src="terminal.js"></script>
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
 </body>
+
 </html>
