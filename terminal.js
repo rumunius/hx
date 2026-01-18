@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 添加一些启动提示
     setTimeout(() => {
-        addOutput('\n💡 Pro Tip: 大多数Linux命令都支持，试试 ls -a 发现隐藏文件', 'info');
+        addOutput('\n💡 Pro Tip: 大多数Linux命令都支持，桌面端按Tab键补全，试试 ls -a 发现隐藏文件', 'info');
         scrollToBottom();
     }, 1500);
     
