@@ -248,6 +248,9 @@ class CommandHandler {
             target = '/home/guest' + target.substring(1);
         }
         
+        // 移除末尾的斜杠
+        target = target.replace(/\/+$/, '');
+        
         const targetPath = resolvePath(this.currentPath, target);
         const obj = getFileSystemObject(targetPath);
         

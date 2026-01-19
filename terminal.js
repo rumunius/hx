@@ -125,12 +125,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function getFileCompletions(partial) {
         let searchPath = commandHandler.currentPath;
         let prefix = '';
+        let pathPrefix = '';
         
         // 处理路径
         if (partial.includes('/')) {
             const lastSlash = partial.lastIndexOf('/');
             const dirPath = partial.substring(0, lastSlash);
             prefix = partial.substring(lastSlash + 1);
+            pathPrefix = dirPath + '/';
             
             if (partial.startsWith('/')) {
                 searchPath = dirPath || '/';
@@ -139,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
             prefix = partial;
+            pathPrefix = '';
         }
         
         // 获取目录内容
@@ -153,7 +156,9 @@ document.addEventListener('DOMContentLoaded', () => {
             .map(item => {
                 const fullName = item.name;
                 // 如果是目录，添加斜杠
-                return item.type === 'directory' ? fullName + '/' : fullName;
+                const name = item.type === 'directory' ? fullName + '/' : fullName;
+                // 保留路径前缀
+                return pathPrefix + name;
             });
         
         return matches;

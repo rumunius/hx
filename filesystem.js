@@ -283,8 +283,11 @@ Good luck, hacker!`
 
 // 获取文件系统路径
 function resolvePath(currentPath, targetPath) {
+    // 移除末尾的斜杠（除非是根目录）
+    targetPath = targetPath.replace(/\/+$/, '');
+    
     if (targetPath.startsWith('/')) {
-        return targetPath;
+        return targetPath || '/';
     }
     
     if (targetPath === '..') {
@@ -293,7 +296,7 @@ function resolvePath(currentPath, targetPath) {
         return '/' + parts.join('/');
     }
     
-    if (targetPath === '.') {
+    if (targetPath === '.' || targetPath === '') {
         return currentPath;
     }
     
