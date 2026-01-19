@@ -5,6 +5,7 @@ class CommandHandler {
         this.commandHistory = [];
         this.historyIndex = -1;
         this.achievements = new Set();
+        this._rmDangerWarned = false;
     }
     
     // 执行命令
@@ -15,53 +16,87 @@ class CommandHandler {
             return { success: true, output: '' };
         }
         
+        // 检测并处理 sudo 前缀
+        let actualInput = trimmedInput;
+        let hasSudo = false;
+        if (/^sudo\s+/i.test(trimmedInput)) {
+            hasSudo = true;
+            actualInput = trimmedInput.replace(/^sudo\s+/i, '').trim();
+        }
+        
         this.commandHistory.push(trimmedInput);
         this.historyIndex = this.commandHistory.length;
         
-        const parts = trimmedInput.split(/\s+/);
+        const parts = actualInput.split(/\s+/);
         const command = parts[0].toLowerCase();
         const args = parts.slice(1);
         
         // 命令路由
+        let result;
         switch (command) {
             case 'help':
-                return this.help();
+                result = this.help();
+                break;
             case 'ls':
-                return this.ls(args);
+                result = this.ls(args);
+                break;
             case 'cd':
-                return this.cd(args);
+                result = this.cd(args);
+                break;
             case 'cat':
-                return this.cat(args);
+                result = this.cat(args);
+                break;
             case 'pwd':
-                return this.pwd();
+                result = this.pwd();
+                break;
             case 'clear':
-                return this.clear();
+                result = this.clear();
+                break;
             case 'whoami':
-                return this.whoami(args);
+                result = this.whoami(args);
+                break;
+            case 'rm':
+                result = this.rm(args);
+                break;
             case 'decrypt':
-                return this.decrypt(args);
+                result = this.decrypt(args);
+                break;
             case 'tree':
-                return this.tree(args);
+                result = this.tree(args);
+                break;
             case 'find':
-                return this.find(args);
+                result = this.find(args);
+                break;
             case 'echo':
-                return this.echo(args);
+                result = this.echo(args);
+                break;
             case 'date':
-                return this.date();
+                result = this.date();
+                break;
             case 'uname':
-                return this.uname();
+                result = this.uname();
+                break;
             case 'history':
-                return this.history();
+                result = this.history();
+                break;
             case 'achievements':
             case 'achievement':
-                return this.showAchievements();
+                result = this.showAchievements();
+                break;
             default:
-                return {
+                result = {
                     success: false,
                     output: `Command not found: ${command}\nType 'help' for available commands.`,
                     type: 'error'
                 };
         }
+        
+        // 如果有 sudo 前缀，添加警告
+        if (hasSudo && result && result.output) {
+            result.output = '请勿尝试获取 root 权限 — 已去掉 sudo 前缀并继续执行。\n\n' + result.output;
+        }
+        
+        return result;
     }
     
     // 帮助命令
@@ -76,12 +111,13 @@ class CommandHandler {
   clear             清空终端屏幕
   
 文件操作 (File Operations):
-  ls [options]      列出当前目录的文件
+  ls [options] [path]  列出目录的文件（默认当前目录）
                     -a : 显示所有文件（包括隐藏文件）
                     -l : 详细信息
   cd <directory>    切换目录
                     .. : 返回上级目录
                     /  : 返回根目录
+                    ~  : 返回家目录
   pwd               显示当前目录路径
   cat <file>        查看文件内容
   tree              显示目录树结构
@@ -118,17 +154,23 @@ class CommandHandler {
     ls(args) {
         let showHidden = false;
         let detailed = false;
+        let targetPath = this.currentPath;
         
+        // 解析参数
         for (const arg of args) {
             if (arg === '-a') showHidden = true;
-            if (arg === '-l') detailed = true;
-            if (arg === '-la' || arg === '-al') {
+            else if (arg === '-l') detailed = true;
+            else if (arg === '-la' || arg === '-al') {
                 showHidden = true;
                 detailed = true;
             }
+            else if (!arg.startsWith('-')) {
+                // 路径参数
+                targetPath = resolvePath(this.currentPath, arg);
+            }
         }
         
-        const items = listDirectory(this.currentPath, showHidden);
+        const items = listDirectory(targetPath, showHidden);
         
         if (items === null) {
             return {
@@ -195,7 +237,18 @@ class CommandHandler {
             return { success: true, output: '' };
         }
         
-        const targetPath = resolvePath(this.currentPath, args[0]);
+        // 支持 ~ 返回家目录
+        let target = args[0];
+        if (target === '~') {
+            this.currentPath = '/home/guest';
+            return { success: true, output: '' };
+        }
+        // 支持 ~/path 格式
+        if (target.startsWith('~/')) {
+            target = '/home/guest' + target.substring(1);
+        }
+        
+        const targetPath = resolvePath(this.currentPath, target);
         const obj = getFileSystemObject(targetPath);
         
         if (!obj) {
@@ -223,6 +276,74 @@ class CommandHandler {
         return {
             success: true,
             output: this.currentPath
+        };
+    }
+    
+    // rm 命令 - 危险操作检测
+    rm(args) {
+        if (args.length === 0) {
+            return {
+                success: false,
+                output: 'rm: missing operand\nTry \'rm --help\' for more information.',
+                type: 'error'
+            };
+        }
+        
+        // 检测危险操作: rm -rf / 或 rm -rf /*
+        const hasRf = args.includes('-rf') || (args.includes('-r') && args.includes('-f'));
+        const hasRoot = args.includes('/') || args.includes('/*');
+        
+        if (hasRf && hasRoot) {
+            if (!this._rmDangerWarned) {
+                // 第一次警告
+                this._rmDangerWarned = true;
+                return {
+                    success: false,
+                    output: `=== 危险操作警告 ===
+
+你正在尝试执行 'rm -rf /' 或 'rm -rf /*'
+这将删除系统中的所有文件！
+
+这是一个极其危险的操作，会导致：
+  整个文件系统被删除
+  系统完全崩溃
+  所有数据永久丢失
+  终端无法恢复
+
+如果你再次执行此命令，终端将会崩溃并停止响应。
+
+请三思而后行！`,
+                    type: 'warning'
+                };
+            } else {
+                // 第二次执行 - 触发终端崩溃
+                this._rmDangerWarned = false; // 重置标志
+                return {
+                    success: false,
+                    output: `=== FATAL ERROR ===
+
+Deleting system files...
+rm: cannot remove '/': System corruption
+rm: cannot remove '/bin': Permission denied
+rm: cannot remove '/boot': I/O error
+Segmentation fault (core dumped)
+
+Kernel panic - not syncing: VFS: Unable to mount root fs
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SYSTEM HALTED
+TERMINAL CORRUPTED
+NO RECOVERY POSSIBLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+                    type: 'error',
+                    crash: true // 特殊标志：触发终端崩溃
+                };
+            }
+        }
+        
+        // 正常的 rm 操作（模拟）
+        return {
+            success: true,
+            output: `rm: removed '${args[args.length - 1]}'`
         };
     }
     

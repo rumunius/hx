@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         echoLine.className = 'command-echo';
         
         const path = commandHandler.currentPath === '/home/guest' ? '~' : commandHandler.currentPath;
-        echoLine.innerHTML = `<span class="prompt">guest@uestc:${path}$</span> ${escapeHtml(command)}`;
+        echoLine.innerHTML = `<span class="prompt">guest@uestc:${path}$</span>${escapeHtml(command)}`;
         
         output.appendChild(echoLine);
     }
@@ -180,10 +180,53 @@ document.addEventListener('DOMContentLoaded', () => {
             if (result.achievement) {
                 showAchievement(result.achievement);
             }
+            
+            // 检查是否触发终端崩溃
+            if (result.crash) {
+                crashTerminal();
+                return;
+            }
         }
         
         updatePrompt();
         scrollToBottom();
+    }
+    
+    // 终端崩溃效果
+    function crashTerminal() {
+        // 禁用输入
+        input.disabled = true;
+        input.style.display = 'none';
+        promptSpan.style.display = 'none';
+        
+        // 添加崩溃效果
+        setTimeout(() => {
+            terminal.style.animation = 'glitch 0.3s infinite';
+            document.body.style.animation = 'shake 0.5s infinite';
+        }, 500);
+        
+        // 添加最终崩溃信息
+        setTimeout(() => {
+            const crashMsg = document.createElement('div');
+            crashMsg.className = 'output-line output-error';
+            crashMsg.style.fontSize = '20px';
+            crashMsg.style.fontWeight = 'bold';
+            crashMsg.style.textAlign = 'center';
+            crashMsg.style.marginTop = '40px';
+            crashMsg.style.animation = 'blink 1s infinite';
+            crashMsg.textContent = '>>> TERMINAL UNRESPONSIVE <<<';
+            output.appendChild(crashMsg);
+            
+            // 添加刷新提示
+            setTimeout(() => {
+                const hint = document.createElement('div');
+                hint.className = 'output-line output-warning';
+                hint.style.textAlign = 'center';
+                hint.style.marginTop = '20px';
+                hint.textContent = '刷新页面以恢复终端';
+                output.appendChild(hint);
+            }, 2000);
+        }, 1500);
     }
     
     // 监听输入
