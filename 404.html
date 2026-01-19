@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Not Found - Project Ginkgo</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .error-ascii {
+            color: var(--text-error);
+            font-family: monospace;
+            white-space: pre;
+            margin: 20px 0;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        .system-msg {
+            margin: 10px 0;
+            color: var(--text-secondary);
+        }
+
+        .cursor-block {
+            display: inline-block;
+            width: 10px;
+            height: 1.2em;
+            background: var(--text-primary);
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-container">
+        <div class="terminal-body" id="terminal-output">
+            <div class="boot-sequence">
+                <div class="boot-line">> CONNECTING TO TARGET...</div>
+                <div class="boot-line">> RESOLVING PATH...</div>
+                <div class="boot-line" style="color: var(--text-error)">> ERROR: TARGET_UNREACHABLE</div>
+                <div class="boot-line" style="color: var(--text-error)">> STATUS: 404 NOT FOUND</div>
+            </div>
+
+            <div class="error-ascii">
+  _  _      ___      _  _   
+ | || |    / _ \    | || |  
+ | || |_  | | | |   | || |_ 
+ |__   _| | |_| |   |__   _|
+    |_|    \___/       |_|  
+            </div>
+
+            <div class="system-msg">
+                The requested resource could not be located in the current sector.
+            </div>
+            
+            <div class="system-msg">
+                Initiating emergency return sequence in <span id="countdown">10</span> seconds...
+            </div>
+
+            <div class="input-line" style="margin-top: 20px;">
+                <span class="prompt">guest@void:~$</span>
+                <span class="cursor-block"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const countdownEl = document.getElementById('countdown');
+        let timeLeft = 10;
+
+        const timer = setInterval(() => {
+            timeLeft--;
+            if (countdownEl) countdownEl.textContent = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                window.location.href = 'index.html';
+            }
+        }, 1000);
+
+        // Press any key to return immediately
+        document.addEventListener('keydown', () => {
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
